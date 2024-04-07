@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <None Remove="Images\Locations\CornField.png" />
+    <None Remove="Images\Locations\DeepForest.png" />
     <None Remove="Images\Locations\FarmHouse.png" />
     <None Remove="Images\Locations\Forest.png" />
     <None Remove="Images\Locations\HerbalistGarden.png" />
@@ -16,10 +17,15 @@
     <None Remove="Images\Locations\TownGate.png" />
     <None Remove="Images\Locations\TownSquare.png" />
     <None Remove="Images\Locations\TraderHouse.png" />
+    <None Remove="Images\Monsters\Goblin.png" />
+    <None Remove="Images\Monsters\Rat.png" />
+    <None Remove="Images\Monsters\Snake.png" />
+    <None Remove="Images\Monsters\Spider.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Images\Locations\CornField.png" />
+    <Resource Include="Images\Locations\DeepForest.png" />
     <Resource Include="Images\Locations\FarmHouse.png" />
     <Resource Include="Images\Locations\Forest.png" />
     <Resource Include="Images\Locations\HerbalistGarden.png" />
@@ -28,6 +34,18 @@
     <Resource Include="Images\Locations\TownGate.png" />
     <Resource Include="Images\Locations\TownSquare.png" />
     <Resource Include="Images\Locations\TraderHouse.png" />
+    <Resource Include="Images\Monsters\Goblin.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Monsters\Rat.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Monsters\Snake.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Monsters\Spider.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>

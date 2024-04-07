@@ -6,11 +6,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Engine.Models;
 using Engine.Factories;
+using System.Threading;
 namespace Engine.ViewModels
 {
     public class GameSession : BaseNotificationClass
     {
         private Location _currentLocation;
+        private Monsters _currentMonster;
+
         public World CurrentWorld { get; set; }
         public Player CurrentPlayer { get; set; }
         public Location CurrentLocation
@@ -25,6 +28,18 @@ namespace Engine.ViewModels
                 OnPropertyChanged(nameof(HasLocationToEast));
                 OnPropertyChanged(nameof(HasLocationToWest));
                 OnPropertyChanged(nameof(HasLocationToSouth));
+                GivePlayerQuestsAtLocation();
+                GetMonsterAtLocation();
+            }
+        }
+        public Monsters CurrentMonster
+        {
+            get { return _currentMonster; }
+            set
+            {
+                _currentMonster = value;
+                OnPropertyChanged(nameof(CurrentMonster));
+                OnPropertyChanged(nameof(HasMonster));
             }
         }
         public bool HasLocationToNorth
@@ -55,6 +70,7 @@ namespace Engine.ViewModels
                 return CurrentWorld.LocationAt(CurrentLocation.XCoordinate - 1, CurrentLocation.YCoordinate) != null;
             }
         }
+        public bool HasMonster => CurrentMonster != null;
         public GameSession()
         {
             CurrentPlayer = new Player
@@ -70,9 +86,7 @@ namespace Engine.ViewModels
 
             CurrentWorld = WorldFactory.CreateWorld();
             CurrentLocation = CurrentWorld.LocationAt(0, -1);
-            CurrentPlayer.Inventory.Add(ItemFactory.CreateGameItems(1001));
-            CurrentPlayer.Inventory.Add(ItemFactory.CreateGameItems(1001));
-            CurrentPlayer.Inventory.Add(ItemFactory.CreateGameItems(1002));
+            
         }
         public void MoveNorth()
         {
@@ -111,6 +125,10 @@ namespace Engine.ViewModels
                     CurrentPlayer.Quests.Add(new QuestStatus(quest));
                 }
             }
+        }
+        private void GetMonsterAtLocation()
+        {
+            CurrentMonster = CurrentLocation.GetMonster();
         }
 
     }

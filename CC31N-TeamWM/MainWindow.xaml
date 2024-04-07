@@ -3,6 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="clr-namespace:Engine.ViewModels;assembly=Engine"
+        d:DataContext="{d:DesignInstance viewModels:GameSession}"
         xmlns:local="clr-namespace:CC31N_TeamWM"
         mc:Ignorable="d"
                 Title="MainWindow" Height="760" Width="1024">
@@ -23,7 +25,11 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="300"/>
         </Grid.ColumnDefinitions>
+        
+        <!-- Menu -->
         <Label Grid.Row="0" Grid.Column="0" Content="Menu" Background="AliceBlue" Grid.ColumnSpan="3"/>
+        
+        <!-- Player stats -->
         <Grid Grid.Row="1" Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -64,7 +70,7 @@
 
             <Label Grid.Row="2" Grid.Column="0" Content="Player Image" Background="Aqua"/>
         </Grid>
-
+        <!-- Inventory and Quests -->
         <Grid Grid.Row="2" Grid.Column="0"
               Background="BurlyWood">
 
@@ -88,7 +94,7 @@
                               AutoGenerateColumns="False"
                               HeadersVisibility="Column">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Name"
+                            <DataGridTextColumn Header="Description"
                                                 Binding="{Binding PlayerQuest.Name}"
                                                 Width="*"/>
                             <DataGridTextColumn Header="Done?"
@@ -99,7 +105,7 @@
                 </TabItem>
             </TabControl>
         </Grid>
-
+        <!-- Action controls -->
         <Label Grid.Row="1" Grid.Column="1" Content="Game Messages" Background="BlanchedAlmond"/>
         <Grid Grid.Row="2" Grid.Column="1">
             <Grid.RowDefinitions>
@@ -112,6 +118,7 @@
             <Label Grid.Row="0" Grid.Column="0" Content="Item Info" Background="Chartreuse"/>
             <Label Grid.Row="0" Grid.Column="1" Content="Item Buttons" Background="Crimson" />
         </Grid>
+        <!-- information -->
         <Grid Grid.Row="1" Grid.Column="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -120,7 +127,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-
+            <!-- Location information -->
             <Grid Grid.Row="0" Grid.Column="0">
                 <Grid.RowDefinitions>
                     <RowDefinition  Height="Auto"/>
@@ -132,7 +139,7 @@
                                HorizontalAlignment="Center"
                                Text="{Binding CurrentLocation.Name}"/>
 
-                <Image Grid.Row="1"
+                <Image Grid.Row="01"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            Height="125"
@@ -144,9 +151,46 @@
                                Text="{Binding CurrentLocation.Description}"
                                TextWrapping=" Wrap"/>
             </Grid>
-
-            <Label Grid.Row="1" Grid.Column="0" Content="Enemy Information" Background="DarkOliveGreen" />
+            
+            <!-- Monster information -->
+            <Grid Grid.Row="1" Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition  Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                
+                <Border Grid.Row="1" Grid.Column="0"
+                    BorderBrush="Gainsboro"
+                    BorderThickness="5">
+                   <Grid>
+                      <Grid.RowDefinitions>
+                         <RowDefinition Height="Auto" />
+                         <RowDefinition Height="*" />
+                         <RowDefinition Height="Auto" />
+                      </Grid.RowDefinitions>
+                      <TextBlock Grid.Row="0"
+                               HorizontalAlignment="Center"
+                               Height="Auto"
+                               Text="{Binding CurrentMonster.Name}" />
+                      <Image Grid.Row="1"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Height="125"
+                           Width="125"
+                           Source="{Binding CurrentMonster.ImageName}" />
+                      <StackPanel Grid.Row="2"
+                                Visibility="{Binding HasMonster, Converter={StaticResource BooleanToVisibility}}"
+                                HorizontalAlignment="Center"
+                                Orientation="Horizontal">
+                         <TextBlock>Current Hit Points:</TextBlock>
+                         <TextBlock Text="{Binding CurrentMonster.HitPoints}" />
+                      </StackPanel>
+                   </Grid>
+                </Border>
+            </Grid>
         </Grid>
+        <!-- Action controls -->
         <Grid Grid.Row="2" Grid.Column="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
