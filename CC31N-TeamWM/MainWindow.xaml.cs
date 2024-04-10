@@ -1,4 +1,5 @@
-﻿using Engine.ViewModels;
+﻿using Engine.EventArgs;
+using Engine.ViewModels;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,7 +22,11 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+
         _gameSession = new GameSession();
+
+        _gameSession.OnMessageRaised += OnGameMessageRaised;
+
         DataContext = _gameSession;
     }
     private void OnClick_MoveNorth(object sender, RoutedEventArgs e)
@@ -39,5 +44,14 @@ public partial class MainWindow : Window
     private void OnClick_MoveSouth(object sender, RoutedEventArgs e)
     {
         _gameSession.MoveSouth();
+    }
+    private void OnClick_AttackMonster(object sender, RoutedEventArgs e)
+    {
+        _gameSession.AttackCurrentMonster();
+    }
+    private void OnGameMessageRaised(object sender, GameMessageEventArgs e)
+    {
+        GameMessages.Document.Blocks.Add(new Paragraph(new Run(e.Message)));
+        GameMessages.ScrollToEnd();
     }
 }
