@@ -13,12 +13,10 @@ using System.Windows.Shapes;
 
 namespace CC31N_TeamWM;
 
-/// <summary>
-/// Interaction logic for MainWindow.xaml
-/// </summary>
+
 public partial class MainWindow : Window
 {
-    private GameSession _gameSession;
+    private readonly GameSession _gameSession = new GameSession();
     public MainWindow()
     {
         InitializeComponent();

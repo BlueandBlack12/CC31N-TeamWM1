@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 namespace Engine.Factories
 {
     public static class ItemFactory
-    {
-        private static List<GameItems> _standardGameItems;
+    {     
+            private static readonly List<GameItems> _standardGameItems = new List<GameItems>(); 
         static ItemFactory()
         {
             _standardGameItems = new List<GameItems>();
@@ -24,6 +24,10 @@ namespace Engine.Factories
             _standardGameItems.Add(new GameItems(9007, "Gold", 1));
             _standardGameItems.Add(new GameItems(9008, "Cloth", 2));
         }
+        
+            
+        
+        
         public static GameItems CreateGameItems(int itemTypeID)
         {
             GameItems standardItem = _standardGameItems.FirstOrDefault(item => item.ItemTypeID == itemTypeID);
