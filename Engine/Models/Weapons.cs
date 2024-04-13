@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
+using System.Xml.Linq;
 
 namespace Engine.Models
 {
@@ -11,7 +8,7 @@ namespace Engine.Models
         public int MinimumDamage { get; set; }
         public int MaximumDamage { get; set; }
         public Weapons(int itemTypeID, string name, int price, int minDamage, int maxDamage)
-            : base(itemTypeID, name, price)
+            : base(itemTypeID, name, price, true)
         {
             MinimumDamage = minDamage;
             MaximumDamage = maxDamage;
