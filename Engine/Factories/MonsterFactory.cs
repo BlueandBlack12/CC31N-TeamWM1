@@ -32,7 +32,7 @@ namespace Engine.Factories
                 case 3:
                     Monster giantSpider =
 
-                        new Monster("Giant Spider", "GiantSpider.png", 10, 10, 10, 3);
+                        new Monster("Giant Spider", "Spider.png", 10, 10, 10, 3);
 
                     giantSpider.CurrentWeapon = ItemFactory.CreateGameItem(1503);
                     AddLootItem(giantSpider, 9005, 25);
