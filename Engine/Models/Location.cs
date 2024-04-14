@@ -38,7 +38,7 @@ namespace Engine.Models
                 MonstersHere.Add(new MonsterEncounter(monsterID, chanceOfEncountering));
             }
         }
-        public Monsters GetMonster()
+        public Monster GetMonster()
         {
             if (!MonstersHere.Any())
             {
@@ -58,11 +58,11 @@ namespace Engine.Models
                 runningTotal += monsterEncounter.ChanceOfEncountering;
                 if (randomNumber <= runningTotal)
                 {
-                    return MonstersFactory.GetMonster(monsterEncounter.MonsterID);
+                    return MonsterFactory.GetMonster(monsterEncounter.MonsterID);
                 }
             }
             // If there was a problem, return the last monster in the list.
-            return MonstersFactory.GetMonster(MonstersHere.Last().MonsterID);
+            return MonsterFactory.GetMonster(MonstersHere.Last().MonsterID);
         }
     }
 }

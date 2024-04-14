@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using System.Collections.Generic;
 namespace Engine.Models
 {
     public class Quest
     {
         public int ID { get; }
-        public string Name { get;  }
+        public string Name { get; }
         public string Description { get; }
         public List<ItemQuantity> ItemsToComplete { get; }
         public int RewardExperiencePoints { get; }

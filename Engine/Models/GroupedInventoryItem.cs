@@ -2,9 +2,9 @@
 {
     public class GroupedInventoryItem : BaseNotificationClass
     {
-        private GameItems _item;
+        private GameItem _item;
         private int _quantity;
-        public GameItems Item
+        public GameItem Item
         {
             get { return _item; }
             set
@@ -22,7 +22,7 @@
                 OnPropertyChanged(nameof(Quantity));
             }
         }
-        public GroupedInventoryItem(GameItems item, int quantity)
+        public GroupedInventoryItem(GameItem item, int quantity)
         {
             Item = item;
             Quantity = quantity;

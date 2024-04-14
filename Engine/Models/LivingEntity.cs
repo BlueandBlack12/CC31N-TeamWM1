@@ -7,12 +7,13 @@ namespace Engine.Models
     public abstract class LivingEntity : BaseNotificationClass
     {
         #region Properties
+
         private string _name;
         private int _currentHitPoints;
         private int _maximumHitPoints;
         private int _gold;
         private int _level;
-
+        private GameItem _currentWeapon;
         public string Name
         {
             get { return _name; }
@@ -58,12 +59,30 @@ namespace Engine.Models
                 OnPropertyChanged();
             }
         }
-        public ObservableCollection<GameItems> Inventory { get; }
+        public GameItem CurrentWeapon
+        {
+            get { return _currentWeapon; }
+            set
+            {
+                if (_currentWeapon != null)
+                {
+                    _currentWeapon.Action.OnActionPerformed -= RaiseActionPerformedEvent;
+                }
+                _currentWeapon = value;
+                if (_currentWeapon != null)
+                {
+                    _currentWeapon.Action.OnActionPerformed += RaiseActionPerformedEvent;
+                }
+                OnPropertyChanged();
+            }
+        }
+        public ObservableCollection<GameItem> Inventory { get; }
         public ObservableCollection<GroupedInventoryItem> GroupedInventory { get; }
-        public List<GameItems> Weapons =>
-            Inventory.Where(i => i is Weapons).ToList();
+        public List<GameItem> Weapons =>
+            Inventory.Where(i => i.Category == GameItem.ItemCategory.Weapon).ToList();
         public bool IsDead => CurrentHitPoints <= 0;
         #endregion
+        public event EventHandler<string> OnActionPerformed;
         public event EventHandler OnKilled;
         protected LivingEntity(string name, int maximumHitPoints, int currentHitPoints,
                                int gold, int level = 1)
@@ -73,8 +92,12 @@ namespace Engine.Models
             CurrentHitPoints = currentHitPoints;
             Gold = gold;
             Level = level;
-            Inventory = new ObservableCollection<GameItems>();
+            Inventory = new ObservableCollection<GameItem>();
             GroupedInventory = new ObservableCollection<GroupedInventoryItem>();
+        }
+        public void UseCurrentWeaponOn(LivingEntity target)
+        {
+            CurrentWeapon.PerformAction(this, target);
         }
         public void TakeDamage(int hitPointsOfDamage)
         {
@@ -109,7 +132,7 @@ namespace Engine.Models
             }
             Gold -= amountOfGold;
         }
-        public void AddItemToInventory(GameItems item)
+        public void AddItemToInventory(GameItem item)
         {
             Inventory.Add(item);
             if (item.IsUnique)
@@ -126,13 +149,12 @@ namespace Engine.Models
             }
             OnPropertyChanged(nameof(Weapons));
         }
-        public void RemoveItemFromInventory(GameItems item)
+        public void RemoveItemFromInventory(GameItem item)
         {
             Inventory.Remove(item);
             GroupedInventoryItem groupedInventoryItemToRemove = item.IsUnique ?
                 GroupedInventory.FirstOrDefault(gi => gi.Item == item) :
                 GroupedInventory.FirstOrDefault(gi => gi.Item.ItemTypeID == item.ItemTypeID);
-
             if (groupedInventoryItemToRemove != null)
             {
                 if (groupedInventoryItemToRemove.Quantity == 1)
@@ -150,6 +172,10 @@ namespace Engine.Models
         private void RaiseOnKilledEvent()
         {
             OnKilled?.Invoke(this, new System.EventArgs());
+        }
+        private void RaiseActionPerformedEvent(object sender, string result)
+        {
+            OnActionPerformed?.Invoke(this, result);
         }
         #endregion
     }

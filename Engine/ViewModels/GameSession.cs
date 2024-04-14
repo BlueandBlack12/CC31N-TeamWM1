@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading;
 using Engine.EventArgs;
 using Engine.Factories;
 using Engine.Models;
@@ -12,7 +11,7 @@ namespace Engine.ViewModels
         #region Properties
         private Player _currentPlayer;
         private Location _currentLocation;
-        private Monsters _currentMonster;
+        private Monster _currentMonster;
         private Trader _currentTrader;
         public World CurrentWorld { get; }
         public Player CurrentPlayer
@@ -22,12 +21,15 @@ namespace Engine.ViewModels
             {
                 if (_currentPlayer != null)
                 {
+                    _currentPlayer.OnActionPerformed -= OnCurrentPlayerPerformedAction;
                     _currentPlayer.OnLeveledUp -= OnCurrentPlayerLeveledUp;
                     _currentPlayer.OnKilled -= OnCurrentPlayerKilled;
                 }
                 _currentPlayer = value;
+
                 if (_currentPlayer != null)
                 {
+                    _currentPlayer.OnActionPerformed -= OnCurrentPlayerPerformedAction;
                     _currentPlayer.OnLeveledUp += OnCurrentPlayerLeveledUp;
                     _currentPlayer.OnKilled += OnCurrentPlayerKilled;
                 }
@@ -50,7 +52,7 @@ namespace Engine.ViewModels
                 CurrentTrader = CurrentLocation.TraderHere;
             }
         }
-        public Monsters CurrentMonster
+        public Monster CurrentMonster
         {
             get { return _currentMonster; }
             set
@@ -82,7 +84,7 @@ namespace Engine.ViewModels
                 OnPropertyChanged(nameof(HasTrader));
             }
         }
-        public Weapons CurrentWeapon { get; set; }
+       
         public bool HasLocationToNorth =>
             CurrentWorld.LocationAt(CurrentLocation.XCoordinate, CurrentLocation.YCoordinate + 1) != null;
         public bool HasLocationToEast =>
@@ -96,10 +98,10 @@ namespace Engine.ViewModels
         #endregion
         public GameSession()
         {
-            CurrentPlayer = new Player("Arno", "Assassin", 0, 10, 10, 1000);
+            CurrentPlayer = new Player("Scott", "Fighter", 0, 10, 10, 1000000);
             if (!CurrentPlayer.Weapons.Any())
             {
-                CurrentPlayer.AddItemToInventory(ItemFactory.CreateGameItems(1001));
+                CurrentPlayer.AddItemToInventory(ItemFactory.CreateGameItem(1001));
             }
             CurrentWorld = WorldFactory.CreateWorld();
             CurrentLocation = CurrentWorld.LocationAt(0, -1);
@@ -160,7 +162,7 @@ namespace Engine.ViewModels
                         CurrentPlayer.ReceiveGold(quest.RewardGold);
                         foreach (ItemQuantity itemQuantity in quest.RewardItems)
                         {
-                            GameItems rewardItem = ItemFactory.CreateGameItems(itemQuantity.ItemID);
+                            GameItem rewardItem = ItemFactory.CreateGameItem(itemQuantity.ItemID);
                             RaiseMessage($"You receive a {rewardItem.Name}");
                             CurrentPlayer.AddItemToInventory(rewardItem);
                         }
@@ -183,14 +185,14 @@ namespace Engine.ViewModels
                     RaiseMessage("Return with:");
                     foreach (ItemQuantity itemQuantity in quest.ItemsToComplete)
                     {
-                        RaiseMessage($"   {itemQuantity.Quantity} {ItemFactory.CreateGameItems(itemQuantity.ItemID).Name}");
+                        RaiseMessage($"   {itemQuantity.Quantity} {ItemFactory.CreateGameItem(itemQuantity.ItemID).Name}");
                     }
                     RaiseMessage("And you will receive:");
                     RaiseMessage($"   {quest.RewardExperiencePoints} experience points");
                     RaiseMessage($"   {quest.RewardGold} gold");
                     foreach (ItemQuantity itemQuantity in quest.RewardItems)
                     {
-                        RaiseMessage($"   {itemQuantity.Quantity} {ItemFactory.CreateGameItems(itemQuantity.ItemID).Name}");
+                        RaiseMessage($"   {itemQuantity.Quantity} {ItemFactory.CreateGameItem(itemQuantity.ItemID).Name}");
                     }
                 }
             }
@@ -201,22 +203,12 @@ namespace Engine.ViewModels
         }
         public void AttackCurrentMonster()
         {
-            if (CurrentWeapon == null)
+            if (CurrentPlayer.CurrentWeapon == null)
             {
                 RaiseMessage("You must select a weapon, to attack.");
                 return;
             }
-            // Determine damage to monster
-            int damageToMonster = RandomNumberGenerator.NumberBetween(CurrentWeapon.MinimumDamage, CurrentWeapon.MaximumDamage);
-            if (damageToMonster == 0)
-            {
-                RaiseMessage($"You missed the {CurrentMonster.Name}.");
-            }
-            else
-            {
-                RaiseMessage($"You hit the {CurrentMonster.Name} for {damageToMonster} points.");
-                CurrentMonster.TakeDamage(damageToMonster);
-            }
+            CurrentPlayer.UseCurrentWeaponOn(CurrentMonster);
             if (CurrentMonster.IsDead)
             {
                 // Get another monster to fight
@@ -237,10 +229,14 @@ namespace Engine.ViewModels
                 }
             }
         }
+        private void OnCurrentPlayerPerformedAction(object sender, string result)
+        {
+            RaiseMessage(result);
+        }
         private void OnCurrentPlayerKilled(object sender, System.EventArgs eventArgs)
         {
             RaiseMessage("");
-            RaiseMessage($"The {CurrentMonster.Name} killed you.");
+            RaiseMessage("You have been killed.");
             CurrentLocation = CurrentWorld.LocationAt(0, -1);
             CurrentPlayer.CompletelyHeal();
         }
@@ -252,7 +248,7 @@ namespace Engine.ViewModels
             CurrentPlayer.AddExperience(CurrentMonster.RewardExperiencePoints);
             RaiseMessage($"You receive {CurrentMonster.Gold} gold.");
             CurrentPlayer.ReceiveGold(CurrentMonster.Gold);
-            foreach (GameItems gameItem in CurrentMonster.Inventory)
+            foreach (GameItem gameItem in CurrentMonster.Inventory)
             {
                 RaiseMessage($"You receive one {gameItem.Name}.");
                 CurrentPlayer.AddItemToInventory(gameItem);
