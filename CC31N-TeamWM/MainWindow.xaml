@@ -15,7 +15,7 @@
     </Window.Resources>
 
     <Grid>
-        <Grid.RowDefinitions>
+        <Grid.RowDefinitions >
             <RowDefinition Height=" Auto"/>
             <RowDefinition Height=" *"/>
             <RowDefinition Height=" 225"/>
@@ -32,7 +32,8 @@
         <Label Grid.Row="0" Grid.Column="0" Content="Menu" Background="AliceBlue" Grid.ColumnSpan="4" Margin="0,0,0,493" Grid.RowSpan="2"/>
 
         <!-- Player stats -->
-        <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+        <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+               Background ="LightPink">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
@@ -70,6 +71,7 @@
 
             </Grid>
 
+           
             <Label Grid.Row="2" Grid.Column="0" Content="Player Image" Background="Aqua"/>
         </Grid>
         <!-- Inventory, Recipes and Quests -->
