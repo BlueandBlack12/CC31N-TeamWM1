@@ -69,6 +69,7 @@ namespace Engine.Models
                     _currentWeapon.Action.OnActionPerformed -= RaiseActionPerformedEvent;
                 }
                 _currentWeapon = value;
+
                 if (_currentWeapon != null)
                 {
                     _currentWeapon.Action.OnActionPerformed += RaiseActionPerformedEvent;
@@ -81,7 +82,9 @@ namespace Engine.Models
         public List<GameItem> Weapons =>
             Inventory.Where(i => i.Category == GameItem.ItemCategory.Weapon).ToList();
         public bool IsDead => CurrentHitPoints <= 0;
-        #endregion
+
+        #endregion 
+
         public event EventHandler<string> OnActionPerformed;
         public event EventHandler OnKilled;
         protected LivingEntity(string name, int maximumHitPoints, int currentHitPoints,

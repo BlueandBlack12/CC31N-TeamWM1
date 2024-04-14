@@ -25,7 +25,7 @@ namespace Engine.Models
             IsUnique = isUnique;          
             Action = action;
         }
-        public void     PerformAction(LivingEntity actor, LivingEntity target)
+        public void  PerformAction(LivingEntity actor, LivingEntity target)
         {
             Action?.Execute(actor, target);
         }
