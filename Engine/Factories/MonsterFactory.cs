@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using Engine.Models;
-
 
 namespace Engine.Factories
 {
@@ -17,31 +11,50 @@ namespace Engine.Factories
             {
                 case 1:
                     Monster snake =
-                        new Monster("Snake", "Snake.png", 4, 4, 2, 3,  5, 1);
+                        new Monster("Snake", "Snake.png", 4, 4, 5, 1);
+                    snake.CurrentWeapon = ItemFactory.CreateGameItem(1501);
                     AddLootItem(snake, 9001, 25);
                     AddLootItem(snake, 9002, 75);
                     return snake;
+
                 case 2:
                     Monster rat =
-                        new Monster("Rat", "Rat.png", 5, 5, 2, 3, 5, 1);
+                        new Monster("Rat", "Rat.png", 5, 5, 5, 1);
+                    rat.CurrentWeapon = ItemFactory.CreateGameItem(1502);
                     AddLootItem(rat, 9003, 25);
                     AddLootItem(rat, 9004, 75);
                     return rat;
+
                 case 3:
                     Monster giantSpider =
-                        new Monster("Giant Spider", "Spider.png", 10, 10, 4, 5, 10, 3);
+                        new Monster("Giant Spider", "GiantSpider.png", 10, 10, 10, 3);
+                    giantSpider.CurrentWeapon = ItemFactory.CreateGameItem(1503);
                     AddLootItem(giantSpider, 9005, 25);
                     AddLootItem(giantSpider, 9006, 75);
                     return giantSpider;
+
                 case 4:
-                    Monster goblin = 
-                    new Monster("Goblin", "Goblin.png", 9, 9, 5, 6, 9, 3);
+                    Monster goblin =
+                    new Monster("Goblin", "Goblin.png", 9, 9, 9, 3);
+
+
+                    goblin.CurrentWeapon = ItemFactory.CreateGameItem(1504);
+
                     AddLootItem(goblin, 9007, 25);
                     AddLootItem(goblin, 9008, 75);
                     return goblin;
-
                 default:
                     throw new ArgumentException(string.Format("MonsterType '{0}' does not exist", monsterID));
+                     case 4:
+     Monster goblin = 
+     new Monster("Goblin", "Goblin.png", 9, 9, 9, 3);
+
+
+     goblin.CurrentWeapon = ItemFactory.CreateGameItem(1504);
+
+     AddLootItem(goblin, 9007, 25);
+     AddLootItem(goblin, 9008, 75);
+     return goblin;
             }
         }
         private static void AddLootItem(Monster monster, int itemID, int percentage)

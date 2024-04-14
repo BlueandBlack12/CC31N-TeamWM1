@@ -1,8 +1,9 @@
 ﻿using System;
 using Engine.Models;
+
 namespace Engine.Actions
 {
-    public class AttackWithWeapon
+    public class AttackWithWeapon : IAction
     {
         private readonly GameItem _weapon;
         private readonly int _maximumDamage;
@@ -30,6 +31,10 @@ namespace Engine.Actions
         public void Execute(LivingEntity actor, LivingEntity target)
         {
             int damage = RandomNumberGenerator.NumberBetween(_minimumDamage, _maximumDamage);
+
+            string actorName = (actor is Player) ? "You" : $"The {actor.Name.ToLower()}";
+            string targetName = (target is Player) ? "you" : $"the {target.Name.ToLower()}";
+
             if (damage == 0)
             {
                 ReportResult($"You missed the {target.Name.ToLower()}.");

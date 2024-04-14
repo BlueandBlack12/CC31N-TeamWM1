@@ -11,7 +11,13 @@ namespace Engine.Factories
         static ItemFactory()
         {
             BuildWeapon(1001, "Pointy Stick", 1, 1, 2);
-            BuildWeapon(1002, "Silver Sword", 5, 1, 5);
+            BuildWeapon(1002, "Silver Sword", 5, 5, 8);
+
+            BuildWeapon(1501, "Snake fangs", 0, 0, 2);
+            BuildWeapon(1502, "Rat claws", 0, 0, 2);
+            BuildWeapon(1503, "Spider fangs", 0, 0, 4);
+            BuildWeapon(1504, "Rusty Sword", 0, 0, 5);
+
 
             BuildMiscellaneousItem(9001, "Snake fang", 1);
             BuildMiscellaneousItem(9002, "Snakeskin", 2);
