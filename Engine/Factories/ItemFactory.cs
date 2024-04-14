@@ -13,6 +13,8 @@ namespace Engine.Factories
             BuildWeapon(1001, "Pointy Stick", 1, 1, 2);
             BuildWeapon(1002, "Silver Sword", 5, 5, 8);
 
+            BuildHealingItem(2001, "Heal Potion", 5, 2);
+
             BuildWeapon(1501, "Snake fangs", 0, 0, 2);
             BuildWeapon(1502, "Rat claws", 0, 0, 2);
             BuildWeapon(1503, "Spider fangs", 0, 0, 4);
@@ -44,6 +46,12 @@ namespace Engine.Factories
             weapon.Action = new AttackWithWeapon(weapon, minimumDamage, maximumDamage);
 
             _standardGameItems.Add(weapon);
+        }
+        private static void BuildHealingItem(int id, string name, int price, int hitPointsToHeal)
+        {
+            GameItem item = new GameItem(GameItem.ItemCategory.Consumable, id, name, price);
+            item.Action = new Heal(item, hitPointsToHeal);
+            _standardGameItems.Add(item);
         }
     }
 }

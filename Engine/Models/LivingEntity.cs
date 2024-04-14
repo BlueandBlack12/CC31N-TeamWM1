@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+
 namespace Engine.Models
 {
     public abstract class LivingEntity : BaseNotificationClass
@@ -14,6 +15,7 @@ namespace Engine.Models
         private int _gold;
         private int _level;
         private GameItem _currentWeapon;
+        private GameItem _currentConsumable;
         public string Name
         {
             get { return _name; }
@@ -77,10 +79,30 @@ namespace Engine.Models
                 OnPropertyChanged();
             }
         }
+        public GameItem CurrentConsumable
+        {
+            get => _currentConsumable;
+            set
+            {
+                if (_currentConsumable != null)
+                {
+                    _currentConsumable.Action.OnActionPerformed -= RaiseActionPerformedEvent;
+                }
+                _currentConsumable = value;
+                if (_currentConsumable != null)
+                {
+                    _currentConsumable.Action.OnActionPerformed += RaiseActionPerformedEvent;
+                }
+                OnPropertyChanged();
+            }
+        }
         public ObservableCollection<GameItem> Inventory { get; }
         public ObservableCollection<GroupedInventoryItem> GroupedInventory { get; }
         public List<GameItem> Weapons =>
             Inventory.Where(i => i.Category == GameItem.ItemCategory.Weapon).ToList();
+        public List<GameItem> Consumables =>
+            Inventory.Where(i => i.Category == GameItem.ItemCategory.Consumable).ToList();
+        public bool HasConsumable => Consumables.Any();
         public bool IsDead => CurrentHitPoints <= 0;
 
         #endregion 
@@ -101,6 +123,11 @@ namespace Engine.Models
         public void UseCurrentWeaponOn(LivingEntity target)
         {
             CurrentWeapon.PerformAction(this, target);
+        }
+        public void UseCurrentConsumable()
+        {
+            CurrentConsumable.PerformAction(this, this);
+            RemoveItemFromInventory(CurrentConsumable);
         }
         public void TakeDamage(int hitPointsOfDamage)
         {
@@ -151,6 +178,8 @@ namespace Engine.Models
                 GroupedInventory.First(gi => gi.Item.ItemTypeID == item.ItemTypeID).Quantity++;
             }
             OnPropertyChanged(nameof(Weapons));
+            OnPropertyChanged(nameof(Consumables));
+            OnPropertyChanged(nameof(HasConsumable));
         }
         public void RemoveItemFromInventory(GameItem item)
         {

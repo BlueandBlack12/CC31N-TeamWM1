@@ -173,6 +173,19 @@
                 <Button Grid.Row="0" Grid.Column="2"
                         Content="Use"
                         Click="OnClick_AttackMonster"/>
+                <Button Grid.Row="0" Grid.Column="2"
+                        Visibility="{Binding HasMonster, Converter={StaticResource BooleanToVisibility}}"
+                        Content="Use"
+                        Click="OnClick_AttackMonster"/>
+                <ComboBox Grid.Row="1" Grid.Column="0"
+                          Visibility="{Binding CurrentPlayer.HasConsumable, Converter={StaticResource BooleanToVisibility}}"
+                          ItemsSource="{Binding CurrentPlayer.Consumables}"
+                          SelectedItem="{Binding CurrentPlayer.CurrentConsumable}"
+                          DisplayMemberPath="Name"/>
+                <Button Grid.Row="1" Grid.Column="2"
+                        Visibility="{Binding CurrentPlayer.HasConsumable, Converter={StaticResource BooleanToVisibility}}"
+                        Content="Use"
+                        Click="OnClick_UseCurrentConsumable"/>
             </Grid>
 
         </Grid>
