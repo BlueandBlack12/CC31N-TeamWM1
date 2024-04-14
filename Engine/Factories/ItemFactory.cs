@@ -13,7 +13,11 @@ namespace Engine.Factories
             BuildWeapon(1001, "Pointy Stick", 1, 1, 2);
             BuildWeapon(1002, "Silver Sword", 5, 5, 8);
 
-            BuildHealingItem(2001, "Heal Potion", 5, 2);
+            BuildHealingItem(2001, "Healing Potion", 5, 2);
+
+            BuildMiscellaneousItem(3001, "Oats", 1);
+            BuildMiscellaneousItem(3002, "Honey", 2);
+            BuildMiscellaneousItem(3003, "Raisins", 2);
 
             BuildWeapon(1501, "Snake fangs", 0, 0, 2);
             BuildWeapon(1502, "Rat claws", 0, 0, 2);
