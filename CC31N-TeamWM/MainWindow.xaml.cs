@@ -58,5 +58,5 @@ public partial class MainWindow : Window
         tradeScreen.Owner = this;
         tradeScreen.DataContext = _gameSession;
         tradeScreen.ShowDialog();
-    }
+    }                                     
 }
